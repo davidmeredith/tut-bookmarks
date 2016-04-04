@@ -55,7 +55,30 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+
+
+                <!--
+                DM: needed if you have multiple main methods in your project.  
+                The start-class property is applied to the "mainClass" configuration parameter of the spring-boot-maven-plugin (which you can do directly if you aren't using the starter)
+                See: http://stackoverflow.com/questions/23217002/how-do-i-tell-spring-boot-which-main-class-to-use-for-the-executable-jar
+                -->
+                <!--<start-class>bookmarks.Application</start-class>-->
+
 	</properties>
+
+    
+       <!-- DM: Add boot maven plugin to build as runnable jar or war -->    
+       <!--<build>
+          <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+          </plugins>
+       </build>-->
+
+
+
 	<repositories>
 		<repository>
 			<id>spring-snapshot</id>

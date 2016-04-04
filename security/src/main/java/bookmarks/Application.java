@@ -24,7 +24,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +36,7 @@ import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.VndErrors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -61,12 +64,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 //
 // curl -X POST -vu android-bookmarks:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=password&username=jlong&grant_type=password&scope=write&client_secret=123456&client_id=android-bookmarks"
-// curl -v POST http://127.0.0.1:8080/tags --data "tags=cows,dogs"  -H "Authorization: Bearer 66953496-fc5b-44d0-9210-b0521863ffcb"
+
+//    curl -v POST http://127.0.0.1:8080/tags --data "tags=cows,dogs"  -H "Authorization: Bearer 66953496-fc5b-44d0-9210-b0521863ffcb"
+
+// curl -v -X POST http://127.0.0.1:8080/bookmarks -d '{"uri":"http://dave.dl.ac.uk", "description":"daves page"}' -H "Content-Type: application/json" -H "Authorization: Bearer 66953496-fc5b-44d0-9210-b0521863ffcb"
 
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-public class Application {
+public class Application extends SpringBootServletInitializer {
 
 	// CORS
 	@Bean
@@ -121,6 +127,11 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+	}
+	
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	    return application.sources(Application.class);
 	}
 }
 
@@ -236,7 +247,7 @@ class BookmarkRestController {
 		return new BookmarkResource(this.bookmarkRepository.findOne(bookmarkId));
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	Resources<BookmarkResource> readBookmarks(Principal principal) {
 		String userId = principal.getName();
 		this.validateUser(userId);

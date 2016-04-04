@@ -11,7 +11,26 @@
 
 	<artifactId>security</artifactId>
 
+
+
+	<!-- DM: build as a war -->
+	<packaging>war</packaging>
+
 	<dependencies>
+	
+
+                <!-- DM: Our parent pom defines the spring boot maven plugin so we 
+                can build as a .war or runnable jar. Therefore, we need to ensure 
+                the embedded tomcat won't interfere with 3rd party tomcat if running 
+                as a war. 
+                See: https://spring.io/guides/gs/convert-jar-to-war/
+                -->
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -45,4 +64,16 @@
 		</dependency>
 
 	</dependencies>
+
+       <!-- DM: Add boot maven plugin to build as runnable jar or war -->    
+       <build>
+          <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+          </plugins>
+       </build>
+
+
 </project>

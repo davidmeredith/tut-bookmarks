@@ -1,0 +1,10 @@
+applications:
+- path: security/target/security-0.0.1-SNAPSHOT.war
+  memory: 512M
+  instances: 1
+  domain: eu-gb.mybluemix.net
+  name: davesSecSpringWS1
+  host: davesSecSpringWS1
+  disk_quota: 1024M
+#  services:
+#  - davesJavaLiberty1-sqldb
